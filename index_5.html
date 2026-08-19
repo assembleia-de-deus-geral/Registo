@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Registo — Assembleia de Deus</title>
+<style>
+  :root{
+    --azul: #1f4a54;
+    --azul-escuro: #123138;
+    --dourado: #c9a227;
+    --fundo: #f5f3ee;
+    --texto: #2b2b2b;
+    --erro: #b3261e;
+    --sucesso: #1e5f3a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background:var(--fundo);
+    color:var(--texto);
+    line-height:1.5;
+  }
+  header{
+    background:var(--azul);
+    color:#fff;
+    padding:28px 20px 22px;
+    text-align:center;
+  }
+  header img{
+    max-height:70px;
+    margin-bottom:10px;
+  }
+  header h1{
+    margin:0;
+    font-size:1.4rem;
+    font-weight:600;
+  }
+  header p{
+    margin:6px 0 0;
+    font-size:0.95rem;
+    opacity:0.9;
+  }
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 16px 60px;
+  }
+  .cartao{
+    background:#fff;
+    border-radius:10px;
+    padding:22px 20px;
+    margin-bottom:18px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  .cartao h2{
+    font-size:1.05rem;
+    color:var(--azul);
+    margin:0 0 14px;
+    border-bottom:2px solid var(--dourado);
+    padding-bottom:6px;
+  }
+  label{
+    display:block;
+    font-weight:600;
+    font-size:0.92rem;
+    margin:14px 0 5px;
+  }
+  label.opcional::after{
+    content:" (opcional)";
+    font-weight:400;
+    color:#777;
+    font-size:0.82rem;
+  }
+  input[type=text], input[type=email], input[type=tel], input[type=date],
+  select, textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:1rem;
+    font-family:inherit;
+    background:#fff;
+  }
+  textarea{min-height:80px; resize:vertical;}
+  .radio-grupo, .checkbox-grupo{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:4px;
+  }
+  .radio-grupo label, .checkbox-grupo label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:400;
+    margin:0;
+    font-size:0.95rem;
+  }
+  .radio-grupo input, .checkbox-grupo input{
+    width:18px;height:18px;flex-shrink:0;
+  }
+  .escondido{display:none !important;}
+  .foto-preview{
+    margin-top:10px;
+    max-width:140px;
+    border-radius:8px;
+    display:none;
+  }
+  button[type=submit]{
+    width:100%;
+    background:var(--dourado);
+    color:var(--azul-escuro);
+    border:none;
+    padding:15px;
+    font-size:1.05rem;
+    font-weight:700;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  button[type=submit]:disabled{opacity:0.6;cursor:wait;}
+  #mensagem{
+    text-align:center;
+    padding:16px;
+    border-radius:8px;
+    margin-top:16px;
+    font-weight:600;
+    display:none;
+  }
+  #mensagem.sucesso{display:block;background:#e5f3ea;color:var(--sucesso);text-align:left;}
+  #mensagem.erro{display:block;background:#fbe9e7;color:var(--erro);}
+  .mensagem-titulo{
+    margin:0 0 6px;
+    font-size:1.1rem;
+    text-align:center;
+  }
+  .mensagem-horarios-titulo{
+    margin:14px 0 6px;
+    font-weight:700;
+  }
+  ul.mensagem-horarios{
+    margin:0;
+    padding-left:20px;
+    font-weight:400;
+  }
+  ul.mensagem-horarios li{margin:4px 0;}
+  .rodape{
+    text-align:center;
+    font-size:0.8rem;
+    color:#888;
+    margin-top:24px;
+  }
+  small.ajuda{display:block;color:#777;margin-top:4px;font-size:0.82rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <!-- Troque esta imagem pelo logótipo da igreja, ou apague a linha -->
+  <img src="logo.png" alt="Logótipo da igreja" onerror="this.style.display='none'">
+  <h1>Assembleia de Deus — Miranda do Corvo &amp; Arganil</h1>
+  <p>Ficha de registo de visitas e membros</p>
+</header>
+
+<main>
+  <form id="formRegisto">
+
+    <div class="cartao">
+      <h2>1. Quem é você?</h2>
+      <div class="radio-grupo" id="grupoSituacao">
+        <label><input type="radio" name="situacao" value="Visitante (primeira vez)" required> É a primeira vez que visita a igreja</label>
+        <label><input type="radio" name="situacao" value="Visitante (já veio antes)"> Já visitou antes, mas ainda não é membro</label>
+        <label><input type="radio" name="situacao" value="Quero ser membro"> Quero tornar-me membro</label>
+        <label><input type="radio" name="situacao" value="Membro (atualizar dados)"> Já sou membro e quero atualizar os meus dados</label>
+      </div>
+    </div>
+
+    <div class="cartao">
+      <h2>2. Dados pessoais</h2>
+
+      <label for="nome">Nome completo</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="nascimento">Data de nascimento</label>
+      <input type="date" id="nascimento" name="nascimento">
+
+      <label for="estadoCivil">Estado civil</label>
+      <select id="estadoCivil" name="estadoCivil">
+        <option value="">Selecione…</option>
+        <option>Solteiro(a)</option>
+        <option>Casado(a)</option>
+        <option>União de facto</option>
+        <option>Divorciado(a)</option>
+        <option>Viúvo(a)</option>
+      </select>
+
+      <div id="campoCasamento" class="escondido">
+        <label for="dataCasamento" class="opcional">Data de casamento</label>
+        <input type="date" id="dataCasamento" name="dataCasamento">
+      </div>
+
+      <label for="profissao" class="opcional">Profissão</label>
+      <input type="text" id="profissao" name="profissao">
+
+      <label for="morada" class="opcional">Morada</label>
+      <input type="text" id="morada" name="morada">
+
+      <label for="telefone">Telefone / WhatsApp</label>
+      <input type="tel" id="telefone" name="telefone" required>
+      <div class="checkbox-grupo" style="margin-top:8px;">
+        <label><input type="checkbox" id="aceitaWhats" name="aceitaWhats" value="Sim"> Aceito receber mensagens da igreja por WhatsApp</label>
+      </div>
+
+      <label for="email" class="opcional">E-mail</label>
+      <input type="email" id="email" name="email">
+    </div>
+
+    <div class="cartao">
+      <h2>3. Vida espiritual</h2>
+
+      <label>Já foi batizado(a) nas águas por imersão?</label>
+      <div class="radio-grupo">
+        <label><input type="radio" name="batizado" value="Sim" required> Sim</label>
+        <label><input type="radio" name="batizado" value="Não"> Não</label>
+        <label><input type="radio" name="batizado" value="Tenho interesse em ser batizado(a)"> Ainda não, mas tenho interesse</label>
+      </div>
+
+      <div id="campoIgrejaOrigem" class="escondido">
+        <label for="igrejaOrigem" class="opcional">Igreja de origem (se vem transferido de outra igreja)</label>
+        <input type="text" id="igrejaOrigem" name="igrejaOrigem">
+      </div>
+
+      <label for="comoConheceu" class="opcional">Como conheceu a nossa igreja?</label>
+      <select id="comoConheceu" name="comoConheceu">
+        <option value="">Selecione…</option>
+        <option>Convite de um amigo ou familiar</option>
+        <option>Redes sociais</option>
+        <option>Evento da igreja</option>
+        <option>Passei em frente / vi o edifício</option>
+        <option>Já frequentava antes</option>
+        <option>Outro</option>
+      </select>
+
+      <label class="opcional">Tem interesse em participar em:</label>
+      <div class="checkbox-grupo">
+        <label><input type="checkbox" name="interesses" value="Estudo bíblico"> Estudo bíblico</label>
+        <label><input type="checkbox" name="interesses" value="Preparação para o batismo"> Preparação para o batismo</label>
+        <label><input type="checkbox" name="interesses" value="Grupo de jovens"> Grupo de jovens</label>
+        <label><input type="checkbox" name="interesses" value="Ministério de louvor"> Ministério de louvor</label>
+        <label><input type="checkbox" name="interesses" value="Ação social / voluntariado"> Ação social / voluntariado</label>
+        <label><input type="checkbox" name="interesses" value="Ainda não sei"> Ainda não sei</label>
+      </div>
+
+      <label for="testemunho" class="opcional">Deixe um pequeno testemunho, se desejar</label>
+      <textarea id="testemunho" name="testemunho"></textarea>
+    </div>
+
+    <div class="cartao">
+      <h2>4. Fotografia</h2>
+      <label for="foto" class="opcional">Foto (para a ficha de identificação)</label>
+      <input type="file" id="foto" name="foto" accept="image/*">
+      <img id="fotoPreview" class="foto-preview">
+      <small class="ajuda">A foto fica guardada de forma privada, apenas para uso interno da igreja.</small>
+    </div>
+
+    <div class="cartao">
+      <h2>5. Acompanhamento e observações</h2>
+
+      <label>Autoriza que a nossa equipa entre em contacto para acompanhamento pastoral?</label>
+      <div class="radio-grupo">
+        <label><input type="radio" name="acompanhamento" value="Sim, pode contactar-me" required> Sim, pode contactar-me</label>
+        <label><input type="radio" name="acompanhamento" value="Prefiro não ser contactado(a) por agora"> Prefiro não ser contactado(a) por agora</label>
+      </div>
+
+      <label for="observacoes" class="opcional">Observações</label>
+      <textarea id="observacoes" name="observacoes"></textarea>
+
+      <div class="checkbox-grupo" style="margin-top:16px;">
+        <label>
+          <input type="checkbox" id="consentimento" name="consentimento" required>
+          Autorizo a Assembleia de Deus de Miranda do Corvo e Arganil a guardar e utilizar estes dados, incluindo a fotografia, exclusivamente para fins de acompanhamento pastoral e comunhão da igreja, nos termos do RGPD.
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" id="botaoEnviar">Enviar registo</button>
+    <div id="mensagem"></div>
+  </form>
+
+  <p class="rodape">Assembleia de Deus — Miranda do Corvo &amp; Arganil</p>
+</main>
+
+<script>
+// ⚠️ Substitua este valor pela URL da sua implementação do Google Apps Script
+// (ver o guia de configuração — passo 4)
+const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxoPrwlkQMjwWSkd_ytchjk0SF0TIa0Yi-glPqcbdWo6caZoofAVyJHSsCAJ4eMBRq8/exec";
+
+const form = document.getElementById('formRegisto');
+const botao = document.getElementById('botaoEnviar');
+const mensagem = document.getElementById('mensagem');
+
+// Mostrar/esconder "data de casamento"
+document.getElementById('estadoCivil').addEventListener('change', function(){
+  document.getElementById('campoCasamento').classList.toggle('escondido', this.value !== 'Casado(a)');
+});
+
+// Mostrar/esconder "igreja de origem"
+document.querySelectorAll('input[name=batizado]').forEach(function(radio){
+  radio.addEventListener('change', function(){
+    // mostra sempre; é opcional e não obriga ninguém a preencher
+    document.getElementById('campoIgrejaOrigem').classList.remove('escondido');
+  });
+});
+
+// Pré-visualização da foto
+document.getElementById('foto').addEventListener('change', function(){
+  const preview = document.getElementById('fotoPreview');
+  const ficheiro = this.files[0];
+  if(!ficheiro){ preview.style.display='none'; return; }
+  const leitor = new FileReader();
+  leitor.onload = e => { preview.src = e.target.result; preview.style.display='block'; };
+  leitor.readAsDataURL(ficheiro);
+});
+
+function escaparHtml(texto){
+  const div = document.createElement('div');
+  div.textContent = texto;
+  return div.innerHTML;
+}
+
+function ficheiroParaBase64(ficheiro){
+  return new Promise((resolve, reject) => {
+    const leitor = new FileReader();
+    leitor.onload = () => resolve(leitor.result.split(',')[1]);
+    leitor.onerror = reject;
+    leitor.readAsDataURL(ficheiro);
+  });
+}
+
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  if(URL_APPS_SCRIPT.indexOf('COLE_AQUI') !== -1){
+    mensagem.className = 'erro';
+    mensagem.textContent = 'Este formulário ainda não está ligado ao Google Sheets. Siga o guia de configuração (passo 4).';
+    return;
+  }
+
+  botao.disabled = true;
+  botao.textContent = 'A enviar…';
+  mensagem.className = '';
+  mensagem.style.display = 'none';
+
+  const dados = new FormData(form);
+  const interesses = dados.getAll('interesses').join(', ');
+
+  const registo = {
+    dataPreenchimento: new Date().toISOString(),
+    situacao: dados.get('situacao') || '',
+    nome: dados.get('nome') || '',
+    nascimento: dados.get('nascimento') || '',
+    estadoCivil: dados.get('estadoCivil') || '',
+    dataCasamento: dados.get('dataCasamento') || '',
+    profissao: dados.get('profissao') || '',
+    morada: dados.get('morada') || '',
+    telefone: dados.get('telefone') || '',
+    aceitaWhats: dados.get('aceitaWhats') ? 'Sim' : 'Não',
+    email: dados.get('email') || '',
+    batizado: dados.get('batizado') || '',
+    igrejaOrigem: dados.get('igrejaOrigem') || '',
+    comoConheceu: dados.get('comoConheceu') || '',
+    interesses: interesses,
+    testemunho: dados.get('testemunho') || '',
+    acompanhamento: dados.get('acompanhamento') || '',
+    observacoes: dados.get('observacoes') || '',
+    fotoBase64: '',
+    fotoNome: '',
+    fotoTipo: ''
+  };
+
+  const ficheiroFoto = document.getElementById('foto').files[0];
+  if(ficheiroFoto){
+    try{
+      registo.fotoBase64 = await ficheiroParaBase64(ficheiroFoto);
+      registo.fotoNome = ficheiroFoto.name;
+      registo.fotoTipo = ficheiroFoto.type;
+    }catch(err){
+      console.error('Erro a ler a foto', err);
+    }
+  }
+
+  try{
+    // 'no-cors' porque o Apps Script não devolve cabeçalhos CORS por definição.
+    // Não conseguimos ler a resposta, mas o pedido é entregue com sucesso.
+    await fetch(URL_APPS_SCRIPT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(registo)
+    });
+
+    const primeiroNome = (registo.nome || '').trim().split(' ')[0];
+    const saudacao = primeiroNome ? ('Obrigado, ' + escaparHtml(primeiroNome) + '!') : 'Obrigado!';
+
+    mensagem.className = 'sucesso';
+    mensagem.innerHTML =
+      '<p class="mensagem-titulo">' + saudacao + '</p>' +
+      '<p>O seu registo foi enviado com sucesso. Ficamos muito felizes por o(a) ter connosco — em breve a nossa equipa entrará em contacto.</p>' +
+      '<p class="mensagem-horarios-titulo">Esperamos por si nos nossos cultos:</p>' +
+      '<ul class="mensagem-horarios">' +
+        '<li><strong>Miranda do Corvo</strong> — Domingos às 10h00 e Quartas-feiras às 20h30</li>' +
+        '<li><strong>Arganil</strong> — Domingos às 15h30</li>' +
+      '</ul>';
+    form.reset();
+    document.getElementById('fotoPreview').style.display = 'none';
+    document.getElementById('campoCasamento').classList.add('escondido');
+  }catch(err){
+    console.error(err);
+    mensagem.className = 'erro';
+    mensagem.textContent = 'Não foi possível enviar o registo. Verifique a ligação à internet e tente novamente.';
+  }finally{
+    botao.disabled = false;
+    botao.textContent = 'Enviar registo';
+  }
+});
+</script>
+
+</body>
+</html>
