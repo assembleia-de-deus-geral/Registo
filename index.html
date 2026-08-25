@@ -393,14 +393,25 @@ form.addEventListener('submit', async function(e){
   }
 
   try{
-    // 'no-cors' porque o Apps Script não devolve cabeçalhos CORS por definição.
-    // Não conseguimos ler a resposta, mas o pedido é entregue com sucesso.
-    await fetch(URL_APPS_SCRIPT, {
+    // Pedido normal (sem 'no-cors'): o Google Apps Script devolve os
+    // cabeçalhos necessários para pedidos "simples" como este, por isso
+    // conseguimos mesmo ler a resposta e confirmar se o registo foi
+    // mesmo guardado — se não confirmarmos, mostramos um erro em vez de
+    // dizer "sucesso" às cegas.
+    const resposta = await fetch(URL_APPS_SCRIPT, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(registo)
     });
+
+    if(!resposta.ok){
+      throw new Error('O servidor respondeu com um erro (HTTP ' + resposta.status + ').');
+    }
+
+    const resultado = await resposta.json();
+    if(!resultado || resultado.sucesso !== true){
+      throw new Error((resultado && resultado.erro) || 'O servidor não confirmou o registo.');
+    }
 
     const primeiroNome = (registo.nome || '').trim().split(' ')[0];
     const saudacao = primeiroNome ? ('Obrigado, ' + escaparHtml(primeiroNome) + '!') : 'Obrigado!';
