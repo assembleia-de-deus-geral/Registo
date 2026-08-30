@@ -227,6 +227,14 @@
         <label><input type="radio" name="batizado" value="Tenho interesse em ser batizado(a)"> Ainda não, mas tenho interesse</label>
       </div>
 
+      <div id="campoDataBatismo" class="escondido">
+        <label for="dataBatismo" class="opcional">Data de batismo</label>
+        <input type="text" id="dataBatismo" name="dataBatismo" placeholder="DD/MM/AAAA, MM/AAAA ou só AAAA"
+          pattern="^(\d{2}/\d{2}/\d{4}|\d{2}/\d{4}|\d{4})$"
+          title="Use DD/MM/AAAA (ex: 17/09/2023), MM/AAAA (ex: 09/2023) ou só o ano (ex: 2023)">
+        <small class="ajuda">Se não se lembrar do dia exato, pode indicar só o mês e o ano, ou só o ano.</small>
+      </div>
+
       <div id="campoIgrejaOrigem" class="escondido">
         <label for="igrejaOrigem" class="opcional">Igreja de origem (se vem transferido de outra igreja)</label>
         <input type="text" id="igrejaOrigem" name="igrejaOrigem">
@@ -306,11 +314,13 @@ document.getElementById('estadoCivil').addEventListener('change', function(){
   document.getElementById('campoCasamento').classList.toggle('escondido', this.value !== 'Casado(a)');
 });
 
-// Mostrar/esconder "igreja de origem"
+// Mostrar/esconder "igreja de origem" e "data de batismo"
 document.querySelectorAll('input[name=batizado]').forEach(function(radio){
   radio.addEventListener('change', function(){
-    // mostra sempre; é opcional e não obriga ninguém a preencher
+    // "Igreja de origem" mostra sempre; é opcional e não obriga ninguém a preencher
     document.getElementById('campoIgrejaOrigem').classList.remove('escondido');
+    // "Data de batismo" só faz sentido para quem já foi batizado
+    document.getElementById('campoDataBatismo').classList.toggle('escondido', this.value !== 'Sim');
   });
 });
 
@@ -370,6 +380,7 @@ form.addEventListener('submit', async function(e){
     aceitaWhats: dados.get('aceitaWhats') ? 'Sim' : 'Não',
     email: dados.get('email') || '',
     batizado: dados.get('batizado') || '',
+    dataBatismo: dados.get('dataBatismo') || '',
     igrejaOrigem: dados.get('igrejaOrigem') || '',
     comoConheceu: dados.get('comoConheceu') || '',
     interesses: interesses,
@@ -429,6 +440,7 @@ form.addEventListener('submit', async function(e){
     form.reset();
     document.getElementById('fotoPreview').style.display = 'none';
     document.getElementById('campoCasamento').classList.add('escondido');
+    document.getElementById('campoDataBatismo').classList.add('escondido');
   }catch(err){
     console.error(err);
     mensagem.className = 'erro';
